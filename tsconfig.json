@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "target": "es6",  //es2016
+    "module": "commonjs",
+    "baseUrl": "src",
+    "outDir": "./dist",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "moduleResolution": "node"
+  },
+  "exclude": ["node_modules",
+    "src/test"
+  ],
+  "include": ["src/**/*.ts"],
+  "typeRoots": [
+    "./@types",
+    "./node_modules/@types",
+  ],
+  "files":["@types/express/index.d.ts"]
+}
+
