@@ -22,21 +22,19 @@ export class PhotoService {
         const file = await s3.upload(photo[0], 'photo');
         const fileName = file.Key.split('photo/').join('');
         const categoriesArr = categories.trim().split(' ');
-        const response = Photo.insertMany({
+        await Photo.insertMany({
             author,
             title,
             description,
             categories: categoriesArr,
             source: fileName,
-        }, (error) => {
-
         })
         res.status(200).end();
     }
 
     async getPhotoList(req: Request, res: Response) {
         let query: any = req.query.categories;
-        const queryArr = query.split(',');
+        const queryArr = query.split(',').map((item: any) => item.toLowerCase());
         try {
             let response;
             if (query === '') {

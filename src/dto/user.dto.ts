@@ -1,29 +1,10 @@
 export class UserDto {
    login: string;
-   id: number;
-   role: string;
-   firstName: string;
-   avatar: string;
+   
+   _id: string;
   
   constructor(user: any) {
     this.login = user.login;
-    this.id = user.id;
-    this.role = user.role.toLowerCase();
-    this.firstName = user.firstName;
-    this.avatar = user.avatar;
-  }
-}
-
-export class UserDtoSmall {
-  login: string;
-  id: number;
-  role: string;
-  firstName: string;
-
-  constructor(user: any) {
-    this.login = user.login;
-    this.id = user.id;
-    this.role = user.role.toLowerCase();
-    this.firstName = user.firstName;
+    this._id = user._id
   }
 }

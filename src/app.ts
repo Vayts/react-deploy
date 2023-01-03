@@ -44,7 +44,7 @@ export class App {
     this.app.use(express.json());
     this.app.use(cookieParser());
   }
-
+  
   routes() {
     this.app.use(express.static('./web'));
     this.app.use('/photo', express.static('./web/static/media'));
