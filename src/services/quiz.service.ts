@@ -6,13 +6,20 @@ import {S3File} from "../interfaces/S3File.interface";
 export class QuizService {
 
     async getQuizList(req: Request, res: Response) {
-        let category: any = req.query.category;
+        const category: any = req.query.category;
+        const search: any = req.query.search;
+        console.log(search);
         try {
             let value;
             if (category === '') {
-                value = await Quiz.find({});
+                value = await Quiz.find({
+                    "title": new RegExp(search)
+                });
             } else {
-                value = await Quiz.find({category});
+                value = await Quiz.find(
+                  {category,
+                    "title": new RegExp(search)
+                });
             }
             res.status(200).send({message: 'SUCCESS', value});
         } catch (err) {

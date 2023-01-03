@@ -17,13 +17,14 @@ export class PhotoService {
 
     async postPhoto(req: Request, res: Response) {
         const {author, title, description, categories} = req.body;
+        console.log(req.user.login)
         const s3 = new AWSUploader();
         const photo = <S3File[]><unknown>req.files;
         const file = await s3.upload(photo[0], 'photo');
         const fileName = file.Key.split('photo/').join('');
         const categoriesArr = categories.trim().split(' ');
         await Photo.insertMany({
-            author,
+            author: req.user.login,
             title,
             description,
             categories: categoriesArr,
