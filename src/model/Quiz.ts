@@ -27,6 +27,11 @@ const QuizSchema = new Schema({
         type: String,
         required: true,
     },
+    author_id: {
+        type: String,
+        required: true,
+        default: '63b21bd9f2051ad2b1f76f13',
+    },
     questions: [
         {
             id: {

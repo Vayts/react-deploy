@@ -16,7 +16,7 @@ export class PhotoService {
     }
 
     async postPhoto(req: Request, res: Response) {
-        const {author, title, description, categories} = req.body;
+        const {title, description, categories} = req.body;
         console.log(req.user.login)
         const s3 = new AWSUploader();
         const photo = <S3File[]><unknown>req.files;

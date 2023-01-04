@@ -38,7 +38,7 @@ export class App {
   middlewares() {
     this.app.use(cors({
       credentials: true,
-      origin: ['http://localhost:4200', 'https://boring-design-app.herokuapp.com/']
+      origin: ['http://localhost:4200', 'https://boring-design-app.herokuapp.com']
     }));
     this.app.use(express.urlencoded({ extended: false }));
     this.app.use(express.json());

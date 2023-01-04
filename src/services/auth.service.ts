@@ -1,4 +1,4 @@
-import {Request, response, Response} from "express";
+import {Request, Response} from "express";
 import bcrypt from 'bcrypt';
 import {User} from "../model/User";
 import {generateTokens} from "../helpers/auth.helper";
@@ -39,7 +39,6 @@ export class AuthService {
         })
         
         const isToken = await Token.findOne({user_id: user._id});
-        console.log(isToken);
         
         if (isToken) {
           await Token.updateOne({user_id: user._id}, {token: tokens.refreshToken})
@@ -52,7 +51,6 @@ export class AuthService {
         res.status(200).send({message: 'SUCCESS', user: {...user, token: tokens.accessToken}})
       })
       .catch((e) => {
-        console.log(e);
         res.status(e.code || 409).send({message: e.message});
       })
   }
@@ -113,7 +111,6 @@ export class AuthService {
         res.status(200).send({message: 'SUCCESS'});
       })
       .catch((e) => {
-        console.log(e);
         res.status(e.code).send({message: e.message});
       })
   }
@@ -132,7 +129,6 @@ export class AuthService {
     
     refreshToken
       .then((response: any) => {
-        console.log(response);
         if (!response) return Promise.reject({code: 401, message: 'NOT_AUTHORIZED2'});
         
         try {
@@ -146,12 +142,10 @@ export class AuthService {
           
           res.status(200).send({message: 'SUCCESS', user: {...user, token: newAccessToken}})
         } catch (e) {
-          console.log(e);
           res.status(401).send({message: 'NOT_AUTHORIZED3'});
         }
       })
       .catch((value: { code: number; message: string }) => {
-        console.log(value);
         res.status(value.code).send({message: value.message});
       });
   }

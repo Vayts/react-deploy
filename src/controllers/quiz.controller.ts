@@ -20,6 +20,7 @@ export class QuizController {
         this.router.get('/get_all', this.service.getQuizList);
         this.router.get('/get_quiz/:id', this.service.getQuiz);
         this.router.post('/create', verifyUser, upload.single('file'), this.service.createQuiz);
+        this.router.post('/result/:id', this.service.getQuizResult);
         this.router.get('/get_trends', this.service.getQuizTrends);
     }
 
