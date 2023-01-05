@@ -30,6 +30,7 @@ export class QuizService {
       ]);
       res.status(200).send({message: 'SUCCESS', value});
     } catch (err) {
+      console.log(err);
       return res.status(409).send({message: 'CONNECTION_ERROR'});
     }
   }
@@ -37,7 +38,10 @@ export class QuizService {
     async getQuiz(req: Request, res: Response) {
       const {id} = req.params;
       try {
-        const test = await Quiz.aggregate([
+        const value = await Quiz.aggregate([
+          {
+            $match: { "_id": new mongoose.Types.ObjectId(id) },
+          },
           {
             $project: {
               title: 1,
@@ -48,6 +52,7 @@ export class QuizService {
               description: 1,
               photo: 1,
               questions: {
+                id: 1,
                 question: 1,
                 answers: {
                   id: 1,
@@ -57,8 +62,7 @@ export class QuizService {
             }
           },
         ]);
-        const value = await Quiz.find({_id: id})
-        res.status(200).send({message: 'SUCCESS', value, test: test});
+        res.status(200).send({message: 'SUCCESS', value});
       } catch (err) {
         return res.status(409).send({message: 'CONNECTION_ERROR'});
       }
@@ -119,6 +123,7 @@ export class QuizService {
         const result = generateResults(userAnswers, correctAnswers);
         res.status(200).send({message: 'SUCCESS', value: result});
       } catch (e) {
+        console.log(e);
         return res.status(409).send({message: 'CONNECTION_ERROR'});
       }
     }
