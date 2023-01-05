@@ -13,7 +13,7 @@ export class QuizService {
     try {
       const value = await Quiz.aggregate([
         {
-          $match: { title: new RegExp(search), category: category || {$exists: true}},
+          $match: { title: new RegExp(search, 'i'), category: category || {$exists: true}},
         },
         {
           $project: {
