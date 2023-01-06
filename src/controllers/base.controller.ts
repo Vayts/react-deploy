@@ -1,5 +1,4 @@
 import {Router} from "express";
-import {PhotoService} from "../services/photo.service";
 import {BaseService} from "../services/base.service";
 
 export class BaseController {

@@ -1,5 +1,4 @@
-import S3, {ClientConfiguration} from 'aws-sdk/clients/s3';
-import * as fs from "fs";
+import S3 from 'aws-sdk/clients/s3';
 import {S3File} from "../interfaces/S3File.interface";
 
 const bucketName = <string>process.env.AWS_BUCKET_NAME;
