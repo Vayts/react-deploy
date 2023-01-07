@@ -7,12 +7,12 @@ export class PhotoService {
 
     downloadPhotoFromAws(req: Request, res: Response) {
         const s3 = new AWSUploader();
-        try {
-            const readStream = s3.download(req.params.link, 'photo');
-            readStream.pipe(res);
-        } catch (e) {
-            res.status(409).send({message: 'CONNECTION_ERROR'});
-        }
+        const readStream = s3.download(req.params.link, 'photo');
+        readStream.then((data: any) => {
+            data.pipe(res);
+        }).catch(() => {
+            return res.status(409).send({message: 'CONNECTION_ERROR'});
+        })
     }
 
     async postPhoto(req: Request, res: Response) {

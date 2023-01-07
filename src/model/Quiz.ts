@@ -32,6 +32,11 @@ const QuizSchema = new Schema({
         required: true,
         default: '63b21bd9f2051ad2b1f76f13',
     },
+    withPhoto: {
+        type: Boolean,
+        required: true,
+        default: false,
+    },
     questions: [
         {
             id: {
@@ -41,6 +46,10 @@ const QuizSchema = new Schema({
             question: {
                 type: String,
                 required: true,
+            },
+            photo: {
+              type: String,
+              required: false,
             },
             answers: [
                 {

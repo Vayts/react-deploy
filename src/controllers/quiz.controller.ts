@@ -19,7 +19,7 @@ export class QuizController {
     checkRoutes() {
         this.router.get('/get_all', this.service.getQuizList);
         this.router.get('/get_quiz/:id', this.service.getQuiz);
-        this.router.post('/create', verifyUser, upload.single('file'), this.service.createQuiz);
+        this.router.post('/create', verifyUser, upload.fields([{name: 'file', maxCount: 1}, {name: 'pictures', maxCount: 100}]), this.service.createQuiz);
         this.router.post('/result/:id', this.service.getQuizResult);
         this.router.get('/get_trends', this.service.getQuizTrends);
     }

@@ -1,8 +1,10 @@
 import {Request, Response} from "express";
 import {Quiz} from "../model/Quiz";
-import {AWSUploader} from "./bucket.service";
-import {S3File} from "../interfaces/S3File.interface";
-import {generateCorrectAnswersArr, generateResults} from "../helpers/quiz.helper";
+import {
+  generateCorrectAnswersArr,
+  generateResults, setQuizWithoutPhotos,
+  setQuizWithPhotos
+} from "../helpers/quiz.helper";
 import mongoose from "mongoose";
 
 export class QuizService {
@@ -24,6 +26,7 @@ export class QuizService {
             author_id: 1,
             description: 1,
             photo: 1,
+            withPhoto: 1,
             questionsLength: {$cond: {if: {$isArray: "$questions"}, then: {$size: "$questions"}, else: "NA"}}
           }
         }
@@ -50,10 +53,12 @@ export class QuizService {
               userAnswers: 1,
               author_id: 1,
               description: 1,
+              withPhoto: 1,
               photo: 1,
               questions: {
                 id: 1,
                 question: 1,
+                photo: 1,
                 answers: {
                   id: 1,
                   text: 1,
@@ -68,30 +73,12 @@ export class QuizService {
       }
     }
     async createQuiz(req: Request, res: Response) {
-      try {
-        const {title, description, category, timeToAnswer} = req.body;
-        const s3 = new AWSUploader();
-        const photo = <S3File><unknown>req.file;
-        const file = await s3.upload(photo, 'photo');
-        const fileName = file.Key.split('photo/').join('');
-        const questions = JSON.parse(req.body.questions);
-        const response = await Quiz.insertMany({
-          title,
-          description,
-          category,
-          timeToAnswer,
-          userAnswers: [],
-          photo: fileName,
-          questions,
-        })
-        const trends = await Quiz.aggregate([
-          {$group: {_id: "$category", count: {$sum: 1}}},
-          {$sort: {count: -1}}
-        ])
-        res.status(200).send({message: 'SUCCESS', value: response, trends})
-      } catch (err) {
-        return Promise.reject({code: 409, message: 'CONNECTION_ERROR'});
-      }
+        const files = req.files as  {[fieldname: string]: Express.Multer.File[]};
+        if (files.pictures) {
+          setQuizWithPhotos(req, res);
+        } else {
+          await setQuizWithoutPhotos(req, res);
+        }
     }
     async getQuizTrends(req: Request, res: Response) {
       try {

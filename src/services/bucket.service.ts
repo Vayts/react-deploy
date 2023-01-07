@@ -28,20 +28,20 @@ export class AWSUploader {
         return s3.upload(uploadParams).promise();
     }
 
-    multiplyUpload(files: S3File[], folder: string) {
+    multiplyUpload(files: S3File[] | File[], folder: string) {
         const promiseArr: Promise<any>[] = [];
-        files.forEach((el) => {
+        files.forEach((el: any) => {
             promiseArr.push(this.upload(el, folder));
         })
         return Promise.all(promiseArr);
     }
 
     download(key: string, folder: string) {
-        const downloadParams = {
-            Bucket: bucketName,
-            Key: `${folder}/${key}`,
-        }
-
-        return s3.getObject(downloadParams).createReadStream();
+        return new Promise((resolve, reject) => {
+            const params = { Bucket: bucketName, Key: `${folder}/${key}` }
+            const s3Stream = s3.getObject(params).createReadStream();
+            s3Stream.on('error', reject);
+            resolve(s3Stream);
+        });
     }
 }
