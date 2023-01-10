@@ -16,3 +16,23 @@ export const verifyUser = (req: Request, res: Response, next: NextFunction) => {
     }
   });
 };
+
+export const addUser = (req: Request, res: Response, next: NextFunction) => {
+  const authHeader = <string>req.headers.authorization || <string>req.headers.Authorization;
+  if (!authHeader?.startsWith('Bearer ')) {
+    next()
+    return;
+  }
+  const token = authHeader.split(' ')[1];
+  jwt.verify(token, <string>process.env.JWT_ACCESS_SECRET, (err, decoded) => {
+    if (err) {
+      next();
+      return;
+    }
+    else {
+      req.user = <User>decoded;
+      next();
+      return;
+    }
+  });
+};
