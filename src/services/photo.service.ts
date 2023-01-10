@@ -342,7 +342,15 @@ export class PhotoService {
             return res.status(200).send({value: result});
         } catch (e) {
             console.log(e);
-            res.status(409).end();
+            return res.status(409).send({message: 'CONNECTION_ERROR'});
+        }
+    }
+
+    getUsersLikesById(req: Request, res: Response) {
+        try {
+            const {id} = req.params;
+        } catch (e) {
+            return res.status(409).send({message: 'CONNECTION_ERROR'});
         }
     }
 }
