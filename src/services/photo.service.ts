@@ -27,16 +27,48 @@ export class PhotoService {
         const fileName = file.Key.split('photo/').join('');
         const categoriesArr = categories.trim().split(' ');
         try {
-            await Photo.insertMany({
-                author: req.user.login,
-                author_id: req.user._id,
-                time: moment(),
-                title,
-                description,
-                categories: categoriesArr,
-                source: fileName,
+            const postPromise = new Promise(async (resolve) => {
+                const response = await Photo.insertMany({
+                    author: req.user.login,
+                    author_id: req.user._id,
+                    time: moment(),
+                    title,
+                    description,
+                    categories: categoriesArr,
+                    source: fileName,
+                });
+                resolve(response);
             })
-            res.status(200).end();
+
+            postPromise.then(async () => {
+                const response = await Photo.aggregate([
+                    {
+                        $lookup: {
+                            from: "user_likes",
+                            localField: "_id",
+                            foreignField: "photo_id",
+                            as: "likes"
+                        }
+                    },
+                    {
+                        $lookup: {
+                            from: "user_favorites",
+                            localField: "_id",
+                            foreignField: "photo_id",
+                            as: "favorites"
+                        }
+                    },
+                    {
+                        $addFields: {
+                            'likes': {$size: "$likes"},
+                            'byUser': [{$in: [new mongoose.Types.ObjectId(req.user._id), '$likes.user_id']}],
+                            'favorite': [{$in: [new mongoose.Types.ObjectId(req.user._id), '$favorites.user_id']}],
+                        }
+                    },
+                    {$sort: {time: -1}},
+                ])
+                res.status(200).send({message: 'SUCCESS', value: response});
+            })
         } catch (e) {
             return res.status(409).send({message: 'CONNECTION_ERROR'});
         }
@@ -44,7 +76,6 @@ export class PhotoService {
 
     async getPhotoList(req: Request, res: Response) {
         let query: any = req.query.categories;
-        console.log(query);
         const queryArr = query.split(',').map((item: any) => item.toLowerCase());
         const id = req.user?._id;
         try {
