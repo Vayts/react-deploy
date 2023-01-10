@@ -346,9 +346,32 @@ export class PhotoService {
         }
     }
 
-    getUsersLikesById(req: Request, res: Response) {
+    async getUsersLikesById(req: Request, res: Response) {
         try {
             const {id} = req.params;
+            const result = await UserLikes.aggregate([
+                {$match: {photo_id: new mongoose.Types.ObjectId(id)}},
+                {
+                    $lookup: {
+                        from: "users",
+                        localField: "user_id",
+                        foreignField: "_id",
+                        as: "users"
+                    }
+                },
+                {$unwind: '$users'},
+                {
+                    $addFields: {
+                        'user': '$users.login'
+                    }
+                },
+                {
+                    $project: {
+                        user: 1,
+                    }
+                }
+            ])
+            res.status(200).send({value: result});
         } catch (e) {
             return res.status(409).send({message: 'CONNECTION_ERROR'});
         }
