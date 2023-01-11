@@ -376,4 +376,15 @@ export class PhotoService {
             return res.status(409).send({message: 'CONNECTION_ERROR'});
         }
     }
+
+    async deleteUserPhoto(req: Request, res: Response) {
+        try {
+            const {id} = req.params;
+            const {_id} = req.user;
+            const result = await Photo.findOneAndDelete({author_id: _id, _id: id});
+            res.status(200).send({value: result})
+        } catch (e) {
+            return res.status(409).send({message: 'CONNECTION_ERROR'});
+        }
+    }
 }

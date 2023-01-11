@@ -24,7 +24,8 @@ export class PhotoController {
         this.router.get('/favorite/:id', verifyUser, this.service.setFavorite);
         this.router.get('/favorite_photos', verifyUser, this.service.getUserFavorites)
         this.router.get('/user_photos', verifyUser, this.service.getUserPhoto);
-        this.router.get('/user_photo_likes/:id', this.service.getUsersLikesById)
+        this.router.get('/user_photo_likes/:id', this.service.getUsersLikesById);
+        this.router.delete('/delete_photo/:id', verifyUser, this.service.deleteUserPhoto)
         this.router.post('/upload', verifyUser, upload.array('file'), this.service.postPhoto);
     }
 

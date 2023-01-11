@@ -1,9 +1,9 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url(/b82a8fe354b86ad9b91d.eot?l9weoo);
-  src:  url(/b82a8fe354b86ad9b91d.eot?l9weoo#iefix) format('embedded-opentype'),
-  url(/c7091952f2d81005915b.ttf?l9weoo) format('truetype'),
-  url(/508c78ebc9318a453d38.woff?l9weoo) format('woff'),
+  src:  url(/49f108d3502d3331cffb.eot?l9weoo);
+  src:  url(/49f108d3502d3331cffb.eot?l9weoo#iefix) format('embedded-opentype'),
+  url(/1de1bb7f639a1286348c.ttf?l9weoo) format('truetype'),
+  url(/1e288d60e30433ab4ba6.woff?l9weoo) format('woff'),
   url(/98eddf9740b70ec7b1d1.svg?l9weoo#icomoon) format('svg');
   font-weight: normal;
   font-style: normal;
@@ -23,6 +23,14 @@
   /* Better Font Rendering =========== */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-more:before {
+  content: "\e912";
+}
+
+.icon-delete:before {
+  content: "\e911";
 }
 
 .icon-edit:before {
