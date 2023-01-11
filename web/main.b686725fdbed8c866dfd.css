@@ -1,9 +1,9 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url(/49f108d3502d3331cffb.eot?l9weoo);
-  src:  url(/49f108d3502d3331cffb.eot?l9weoo#iefix) format('embedded-opentype'),
-  url(/1de1bb7f639a1286348c.ttf?l9weoo) format('truetype'),
-  url(/1e288d60e30433ab4ba6.woff?l9weoo) format('woff'),
+  src:  url(/ab0f507b64e061ff6272.eot?l9weoo);
+  src:  url(/ab0f507b64e061ff6272.eot?l9weoo#iefix) format('embedded-opentype'),
+  url(/cbfb383a143dc15fd1e7.ttf?l9weoo) format('truetype'),
+  url(/627939c7710d6925ab6a.woff?l9weoo) format('woff'),
   url(/98eddf9740b70ec7b1d1.svg?l9weoo#icomoon) format('svg');
   font-weight: normal;
   font-style: normal;
@@ -23,6 +23,10 @@
   /* Better Font Rendering =========== */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-comment:before {
+  content: "\e913";
 }
 
 .icon-more:before {
