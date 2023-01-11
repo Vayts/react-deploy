@@ -99,7 +99,7 @@ export class PhotoService {
                             foreignField: "photo_id",
                             as: "likes"
                         }
-                        },
+                    },
                     {
                         $lookup: {
                             from: "user_favorites",
@@ -107,7 +107,7 @@ export class PhotoService {
                             foreignField: "photo_id",
                             as: "favorites"
                         }
-                        },
+                    },
                     {
                         $lookup: {
                             from: "user_comments",
@@ -116,17 +116,19 @@ export class PhotoService {
                             as: "comments"
                         }
                     },
-                    { $addFields: {
-                            'likes': { $size: "$likes" },
+                    {
+                        $addFields: {
+                            'likes': {$size: "$likes"},
                             'comments': {$size: "$comments"},
-                            'byUser': [{ $in: [new mongoose.Types.ObjectId(id), '$likes.user_id'] }],
-                            'favorite': [{ $in: [new mongoose.Types.ObjectId(id), '$favorites.user_id'] }],
-                        } },
-                    { $sort: { time: -1 } },
+                            'byUser': [{$in: [new mongoose.Types.ObjectId(id), '$likes.user_id']}],
+                            'favorite': [{$in: [new mongoose.Types.ObjectId(id), '$favorites.user_id']}],
+                        }
+                    },
+                    {$sort: {time: -1}},
                 ])
             } else {
                 response = await Photo.aggregate([
-                    { $match: {categories: { $in: queryArr}}},
+                    {$match: {categories: {$in: queryArr}}},
                     {
                         $lookup: {
                             from: "user_likes",
@@ -134,7 +136,7 @@ export class PhotoService {
                             foreignField: "photo_id",
                             as: "likes"
                         }
-                        },
+                    },
                     {
                         $lookup: {
                             from: "user_favorites",
@@ -142,7 +144,7 @@ export class PhotoService {
                             foreignField: "photo_id",
                             as: "favorites"
                         }
-                        },
+                    },
                     {
                         $lookup: {
                             from: "user_comments",
@@ -151,13 +153,15 @@ export class PhotoService {
                             as: "comments"
                         }
                     },
-                    { $addFields: {
-                            'likes': { $size: "$likes" },
+                    {
+                        $addFields: {
+                            'likes': {$size: "$likes"},
                             'comments': {$size: "$comments"},
-                            'byUser': [{ $in: [new mongoose.Types.ObjectId(id), '$likes.user_id'] }],
-                            'favorite': [{ $in: [new mongoose.Types.ObjectId(id), '$favorites.user_id'] }],
-                        } },
-                    { $sort: { time: -1 } },
+                            'byUser': [{$in: [new mongoose.Types.ObjectId(id), '$likes.user_id']}],
+                            'favorite': [{$in: [new mongoose.Types.ObjectId(id), '$favorites.user_id']}],
+                        }
+                    },
+                    {$sort: {time: -1}},
                 ])
             }
             res.status(200).send({message: 'SUCCESS', value: response});
@@ -180,12 +184,12 @@ export class PhotoService {
                 if (response) {
                     return UserLikes.findOneAndDelete({user_id: _id, photo_id: id});
                 } else {
-                    return await UserLikes.insertMany([{user_id: _id, photo_id: id}], );
+                    return await UserLikes.insertMany([{user_id: _id, photo_id: id}],);
 
                 }
             }).then(async () => {
                 const result = await Photo.aggregate([
-                    { $match: { _id: new mongoose.Types.ObjectId(id)}},
+                    {$match: {_id: new mongoose.Types.ObjectId(id)}},
                     {
                         $lookup: {
                             from: "user_likes",
@@ -214,11 +218,11 @@ export class PhotoService {
                         $addFields: {
                             'likes': {$size: "$likes"},
                             'comments': {$size: "$comments"},
-                            'byUser': [{ $in: [new mongoose.Types.ObjectId(_id), '$likes.user_id'] }],
-                            'favorite': [{ $in: [new mongoose.Types.ObjectId(_id), '$favorites.user_id'] }],
+                            'byUser': [{$in: [new mongoose.Types.ObjectId(_id), '$likes.user_id']}],
+                            'favorite': [{$in: [new mongoose.Types.ObjectId(_id), '$favorites.user_id']}],
                         }
                     },
-                    { $sort: { time: -1 } },
+                    {$sort: {time: -1}},
                 ])
                 return res.status(200).send({value: result[0]});
             })
@@ -241,12 +245,12 @@ export class PhotoService {
                 if (response) {
                     return UserFavorites.findOneAndDelete({user_id: _id, photo_id: id});
                 } else {
-                    return await UserFavorites.insertMany([{user_id: _id, photo_id: id}], );
+                    return await UserFavorites.insertMany([{user_id: _id, photo_id: id}],);
 
                 }
             }).then(async () => {
                 const result = await Photo.aggregate([
-                    { $match: { _id: new mongoose.Types.ObjectId(id)}},
+                    {$match: {_id: new mongoose.Types.ObjectId(id)}},
                     {
                         $lookup: {
                             from: "user_likes",
@@ -275,11 +279,11 @@ export class PhotoService {
                         $addFields: {
                             'likes': {$size: "$likes"},
                             'comments': {$size: "$comments"},
-                            'byUser': [{ $in: [new mongoose.Types.ObjectId(_id), '$likes.user_id'] }],
-                            'favorite': [{ $in: [new mongoose.Types.ObjectId(_id), '$favorites.user_id'] }],
+                            'byUser': [{$in: [new mongoose.Types.ObjectId(_id), '$likes.user_id']}],
+                            'favorite': [{$in: [new mongoose.Types.ObjectId(_id), '$favorites.user_id']}],
                         }
                     },
-                    { $sort: { time: -1 } },
+                    {$sort: {time: -1}},
                 ]);
                 return res.status(200).send({value: result[0]});
             })
@@ -317,16 +321,16 @@ export class PhotoService {
                         as: "comments"
                     }
                 },
-                { $match: { "likes.user_id": new mongoose.Types.ObjectId(_id)}},
+                {$match: {"likes.user_id": new mongoose.Types.ObjectId(_id)}},
                 {
                     $addFields: {
                         'likes': {$size: "$likes"},
                         'comments': {$size: "$comments"},
-                        'byUser': [{ $in: [new mongoose.Types.ObjectId(_id), '$likes.user_id'] }],
-                        'favorite': [{ $in: [new mongoose.Types.ObjectId(_id), '$favorites.user_id'] }],
+                        'byUser': [{$in: [new mongoose.Types.ObjectId(_id), '$likes.user_id']}],
+                        'favorite': [{$in: [new mongoose.Types.ObjectId(_id), '$favorites.user_id']}],
                     }
                 },
-                { $sort: { time: -1 } },
+                {$sort: {time: -1}},
             ])
             return res.status(200).send({value: result});
         } catch (e) {
@@ -363,16 +367,16 @@ export class PhotoService {
                         as: "comments"
                     }
                 },
-                { $match: { "favorites.user_id": new mongoose.Types.ObjectId(_id)}},
+                {$match: {"favorites.user_id": new mongoose.Types.ObjectId(_id)}},
                 {
                     $addFields: {
                         'likes': {$size: "$likes"},
                         'comments': {$size: "$comments"},
-                        'byUser': [{ $in: [new mongoose.Types.ObjectId(_id), '$likes.user_id'] }],
-                        'favorite': [{ $in: [new mongoose.Types.ObjectId(_id), '$favorites.user_id'] }],
+                        'byUser': [{$in: [new mongoose.Types.ObjectId(_id), '$likes.user_id']}],
+                        'favorite': [{$in: [new mongoose.Types.ObjectId(_id), '$favorites.user_id']}],
                     }
                 },
-                { $sort: { time: -1 } },
+                {$sort: {time: -1}},
             ])
             return res.status(200).send({value: result});
         } catch (e) {
@@ -385,7 +389,7 @@ export class PhotoService {
         try {
             const {_id} = req.user;
             const result = await Photo.aggregate([
-                { $match: { author_id: new mongoose.Types.ObjectId(_id)}},
+                {$match: {author_id: new mongoose.Types.ObjectId(_id)}},
                 {
                     $lookup: {
                         from: "user_likes",
@@ -414,11 +418,11 @@ export class PhotoService {
                     $addFields: {
                         'likes': {$size: "$likes"},
                         'comments': {$size: "$comments"},
-                        'byUser': [{ $in: [new mongoose.Types.ObjectId(_id), '$likes.user_id'] }],
-                        'favorite': [{ $in: [new mongoose.Types.ObjectId(_id), '$favorites.user_id'] }],
+                        'byUser': [{$in: [new mongoose.Types.ObjectId(_id), '$likes.user_id']}],
+                        'favorite': [{$in: [new mongoose.Types.ObjectId(_id), '$favorites.user_id']}],
                     }
                 },
-                { $sort: { time: -1 } },
+                {$sort: {time: -1}},
             ])
             return res.status(200).send({value: result});
         } catch (e) {
@@ -602,13 +606,10 @@ export class PhotoService {
                 .then((response) => {
                     res.status(200).send({message: 'SUCCESS', value: response[0]});
                 })
-                .catch(() => {
-                return res.status(409).send({message: 'CONNECTION_ERROR'});
-            })
-
-            const response = await UserComments.findOneAndDelete({ $or: [ { comment_author_id: _id }, { photo_author_id: _id }], photo_id: id, _id: commentId })
-            console.log(response);
-
+                .catch((e) => {
+                    console.log(e);
+                    throw new Error();
+                })
         } catch (e) {
             console.log(e);
             return res.status(409).send({message: 'CONNECTION_ERROR'});
