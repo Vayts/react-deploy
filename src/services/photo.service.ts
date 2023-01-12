@@ -164,9 +164,37 @@ export class PhotoService {
                     {$sort: {time: -1}},
                 ])
             }
+
             res.status(200).send({message: 'SUCCESS', value: response});
-        } catch (err) {
-            console.log(err);
+        } catch (e) {
+            console.log(e);
+            return res.status(409).send({message: 'CONNECTION_ERROR'});
+        }
+    }
+
+    async getPhotoTrends(req: Request, res: Response) {
+        try {
+            const responseTrends = await Photo.aggregate([
+                {
+                    $unwind: "$categories"
+                },
+                {
+                    $group: {
+                        _id: "$categories",
+                        categories: { $push: "$categories" },
+                    },
+                },
+                {
+                    $project: {
+                        count: {$size: "$categories"}
+                    }
+                },
+                {$sort: { count: -1} },
+                {$limit: 5},
+            ]);
+            res.status(200).send({message: 'SUCCESS', value: responseTrends});
+        } catch (e) {
+            console.log(e);
             return res.status(409).send({message: 'CONNECTION_ERROR'});
         }
     }

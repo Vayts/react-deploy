@@ -17,6 +17,7 @@ export class PhotoController {
     }
 
     checkRoutes() {
+        this.router.get('/trends', this.service.getPhotoTrends);
         this.router.get('/download/:link', this.service.downloadPhotoFromAws);
         this.router.get('/list', addUser, this.service.getPhotoList);
         this.router.get('/like/:id', verifyUser, this.service.photoLike);
